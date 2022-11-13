@@ -16,13 +16,10 @@ import '../../domain/use_cases/login_use_case.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  late PostLoginUseCase postLoginUseCase;
-  LoginCubit() : super(LoginInitial()) {
-    // TODO: implement LoginCubit
-    throw UnimplementedError();
-  }
+  LoginCubit({required this.postLoginUseCase}) : super(LoginInitial());
+  final PostLoginUseCase postLoginUseCase;
 
-  LoginModel loginModel=LoginModel();
+LoginModel loginModel=LoginModel();
   Future<void> postLoginData(
       ) async {
     emit(LoginLoading());
