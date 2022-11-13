@@ -24,12 +24,13 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.push(
          context, MaterialPageRoute(builder: (context) {
             return
-                // create: (context) {
-                // //  LoginCubit cubit = LoginCubit();
-                //  // return cubit;
-                // },
-               LoginScreen()
-              ;
+              BlocProvider<LoginCubit>(
+                create: (context) {
+                  LoginCubit cubit = LoginCubit();
+                  return cubit;
+                },
+                child: LoginScreen(),
+              );
           })
       );
 

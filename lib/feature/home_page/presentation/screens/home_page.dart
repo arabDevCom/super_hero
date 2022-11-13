@@ -77,6 +77,7 @@ class _HomePageScreenState extends State<HomePageScreen>
                   physics: const NeverScrollableScrollPhysics(),
                   controller: _tabController,
                   children: const [
+
                     NewOrderScreenWidget(),
                     CompleteOrdersScreenWidget(),
                   ],

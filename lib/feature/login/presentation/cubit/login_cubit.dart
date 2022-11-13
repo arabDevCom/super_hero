@@ -1,41 +1,51 @@
-
+import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
-import 'package:dartz/dartz.dart';
-import 'package:equatable/equatable.dart';
+import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../core/error/failures.dart';
-import '../../../../core/utils/map_failure_message.dart';
+import '../../../../service.dart';
 import '../../data/models/login_model.dart';
 import '../../data/models/user_model.dart';
-import '../../domain/use_cases/login_use_case.dart';
 
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit({required this.postLoginUseCase}) : super(LoginInitial());
-  final PostLoginUseCase postLoginUseCase;
+  late ServiceApi api;
 
-LoginModel loginModel=LoginModel();
-  Future<void> postLoginData(
-      ) async {
-    emit(LoginLoading());
+  LoginModel loginModel = LoginModel();
 
-    Either<Failure, UserModel> response =
-        await postLoginUseCase(loginModel);
-    emit(state);
-
+  LoginCubit() : super(LoginInitial()) {
+    api = ServiceApi();
   }
 
-  storeUser( UserModel loginModel) async {
+  void login(BuildContext context) async {
+    //  AppWidget.createProgressDialog(context, 'wait'.tr());
+
+    try {
+      UserModel response = await api.login(loginModel);
+      // Navigator.pop(context);
+
+      if (response != null) {
+        print("oooooooooooooooooo");
+        storeUser(response);
+        emit(OnLoginSuccess(response));
+      }
+      // else if (response.status.code == 406) {
+      //   emit(OnSignUp(loginModel));
+      // } else {
+      //   print("errorCode=>${response.status.code}");
+      // }
+    } catch (e) {
+      print("error${e.toString()}");
+      Navigator.pop(context);
+      emit(OnError(e.toString()));
+    }
+  }
+  storeUser(UserModel loginModel) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('user', jsonEncode(loginModel));
-  }
-
-  loginSuccessfully() {
-    emit(LoginInitial());
   }
 }

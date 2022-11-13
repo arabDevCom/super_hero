@@ -87,7 +87,7 @@ class LoginScreen extends StatelessWidget {
                             if (_formKey.currentState!.validate()) {
                               cubit.loginModel.params.login=emailController.value.text;
                               cubit.loginModel.params.password=passwordController.value.text;
-                              cubit.postLoginData();
+                              cubit.login(context);
                               // Navigator.pushNamed(context, Routes.homePageRoute);
                             }
                           },

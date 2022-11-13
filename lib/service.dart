@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'core/api/end_points.dart';
 import 'feature/home_page/data/models/sale_model.dart';
 import 'feature/home_page/data/models/send_model.dart';
+import 'feature/login/data/models/login_model.dart';
+import 'feature/login/data/models/user_model.dart';
 
 
 class ServiceApi {
@@ -47,5 +49,19 @@ print("dlldldldl${response.toString()}");
     }
   }
 
+  Future<UserModel> login(LoginModel loginModel) async {
+    try {
+
+
+      Response response = await dio.post('web/session/authenticate', data: loginModel);
+      print(response.data);
+      return UserModel.fromJson(response.data);
+    } on DioError catch (e) {
+      print("88888888888888888888888888888@${e}");
+
+      //final errorMessage = DioExceptions.fromDioError(e).toString();
+      throw Exception();
+    }
+  }
 
 }
